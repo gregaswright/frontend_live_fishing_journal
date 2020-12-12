@@ -11,6 +11,13 @@ class AuthContainer extends React.Component {
         viewProfileClicked: false
     }
 
+    sendUser = () => {
+        return (
+            this.props.pullCurrentUser(this.state.user)
+        )
+    }
+    
+
     loginHandler = (userInfo) => {
         fetch('http://localhost:3000/api/v1/login', {
             method: 'POST',
@@ -24,6 +31,7 @@ class AuthContainer extends React.Component {
         .then(data => {
             localStorage.setItem("token", data.jwt)
             this.setState({ user: data.user })
+            this.props.pullCurrentUser(this.state.user)
         })
     }
 
@@ -125,6 +133,7 @@ class AuthContainer extends React.Component {
     render() {
         console.log(this.state.user)
         console.log(this.state.editProfileClicked)
+        
         return (
             <>
                 { this.state.user.length === 0 ? this.renderLoginSignup() :
