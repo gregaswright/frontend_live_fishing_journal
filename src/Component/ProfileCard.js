@@ -10,7 +10,7 @@ class ProfileCard extends React.Component {
     }
 
     render() {
-        console.log(this.props.editProfileClicked)
+      
         return (
            
             <div>

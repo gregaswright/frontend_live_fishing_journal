@@ -14,13 +14,16 @@ class App extends React.Component {
     this.setState({ user: user})
   }
 
+  clearUser = () => {
+    this.setState({ user: []})
+  }
+
   render() {
-    console.log(this.state.user)
     return (
       <div>
         <h1>LiveFishingJournal</h1>
           <div>
-            <AuthContainer pullCurrentUser={this.pullCurrentUser}/>
+            <AuthContainer pullCurrentUser={this.pullCurrentUser} clearUser={this.clearUser}/>
             <PinContainer user={this.state.user}/>
           </div>
       </div>

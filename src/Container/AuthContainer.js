@@ -16,6 +16,21 @@ class AuthContainer extends React.Component {
             this.props.pullCurrentUser(this.state.user)
         )
     }
+
+    componentDidMount(){
+        const token = localStorage.getItem("token")
+        if (token) {
+            fetch("http://localhost:3000/api/v1/profile", {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}`},
+        })
+            .then(resp => resp.json())
+            .then(data => { 
+                this.setState({ user: data.user })
+                this.props.pullCurrentUser(this.state.user)
+            })
+        } 
+    }
     
 
     loginHandler = (userInfo) => {
@@ -95,6 +110,7 @@ class AuthContainer extends React.Component {
             user: [],
             editProfileClicked: false
         })
+        this.props.clearUser()
     }
 
     editClickHandler = () => {
@@ -132,7 +148,6 @@ class AuthContainer extends React.Component {
 
     render() {
         console.log(this.state.user)
-        console.log(this.state.editProfileClicked)
         
         return (
             <>
