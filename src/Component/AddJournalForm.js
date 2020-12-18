@@ -12,7 +12,7 @@ class AddJournalForm extends React.Component {
         rod_setup: "",
         note: "",
         image: "",
-        pin_id: this.props.pin.id
+        pin_id: ""
     }
 
     changeHandler = (event) => {
@@ -21,7 +21,8 @@ class AddJournalForm extends React.Component {
 
     submitHandler = (event) => {
         event.preventDefault()
-        this.props.addJournalEntry(this.state)
+        this.props.addJournalEntry(this.state, this.props.selectedPin)
+        
     }
 
     render(){

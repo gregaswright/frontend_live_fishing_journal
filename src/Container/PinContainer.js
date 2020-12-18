@@ -23,13 +23,6 @@ class PinContainer extends React.Component {
         })
     }
 
-
-    // componentDidMount() {
-    //     fetch('http://localhost:3000/api/v1/pins/')
-    //     .then(r => r.json())
-    //     .then(pinData => this.setState({ pinAPI: pinData}))
-    // }
-
     addPin = (newPinObj) => {
         console.log(newPinObj)
         fetch("http://localhost:3000/api/v1/pins/", {
