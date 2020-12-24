@@ -5,6 +5,7 @@ import FishJournalCard from '../Component/FishJournalCard'
 import AddPinForm from '../Component/AddPinForm'
 import AddJournalFrom from '../Component/AddJournalForm'
 import mapStyles from '../mapStyles'
+import Button from "react-bootstrap/Button"
 import '../Modal.css'
 
 const mapSize = {
@@ -297,7 +298,7 @@ class MapContainer extends React.Component {
         console.log(this.props.user)
         return(
             <div>
-                <button onClick={this.addNewPinClicked}>Add New Pin</button> 
+                <Button className="AddPinButton" variant="default" style={{ color: "white", background: "#0065a2" }} onClick={this.addNewPinClicked}>Add New Fish Pin</Button> 
                 {this.state.addNewPinClicked === false ? <></> : <AddPinForm addPin={this.addPin} user={this.props.user} latLng={this.state.currentMarker} closeForm={this.addNewPinClicked}/>}
                 
                 {/* {this.state.selectedPin && this.renderDeletePinAddJournal()} */}

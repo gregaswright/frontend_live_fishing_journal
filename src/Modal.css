@@ -17,5 +17,15 @@
     padding-bottom: 0px;
     padding-left: 25px;
   }
+
+  .AddPinButton{
+    position: relative;
+    z-index: 3;
+    left: 10px;
+    top: 98px;
+    width: 168px;
+    border-radius: 0px;
+    background-color: red;
+  }
   
    
