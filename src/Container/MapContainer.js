@@ -1,13 +1,15 @@
 import React from 'react'
 import { Map, Marker, GoogleApiWrapper, InfoWindow } from 'google-maps-react';
+import Modal from 'react-modal'
 import FishJournalCard from '../Component/FishJournalCard'
 import AddPinForm from '../Component/AddPinForm'
 import AddJournalFrom from '../Component/AddJournalForm'
 import mapStyles from '../mapStyles'
+import '../Modal.css'
 
 const mapSize = {
     width: '100%',
-    height: '50%',
+    height: '100%',
   };
 
 class MapContainer extends React.Component {
@@ -26,8 +28,8 @@ class MapContainer extends React.Component {
         addJournalClicked: false
     }
 
-    // 40.717186044687764
-    // -74.01512420657701
+
+// CRUD functions 
     componentDidMount() {
         Promise.all([
             fetch('http://localhost:3000/api/v1/pins/').then(res => res.json()),
@@ -199,8 +201,8 @@ class MapContainer extends React.Component {
         })
     }
 
-  
 
+//Conditional Render Functions
     localAddPinClickHandler = () => {
         this.setState(prevState => ({
             addPinClicked: !prevState.addPinClicked
@@ -213,7 +215,27 @@ class MapContainer extends React.Component {
         }))
     }
 
+    renderJournalsClicked = () => {
+        console.log("hello")
+        this.setState(prevState => ({
+            viewJournalsClicked: !prevState.viewJournalsClicked
+        }))
+    }
+
+    addNewPinClicked = () => {
+        this.setState(prevState => ({
+            addNewPinClicked: !prevState.addNewPinClicked
+        }))
+    }
     
+    addJournalClickedHandler = () => {
+        this.setState(prevState => ({
+            addJournalClicked: !prevState.addJournalClicked
+        }))
+    }
+
+
+// Map Click Location for Setting Pin    
     mapClickHandler = (mapProps, map, event) => {
         let newLat = event.latLng.lat()
         let newLong = event.latLng.lng()
@@ -227,7 +249,9 @@ class MapContainer extends React.Component {
         console.log(this.state.currentMarker)
         console.log(this.state.selectedPin)
     }
-    
+
+
+// Render User Data
     renderUserMarkers = () => {
         let filterByUser = this.state.pins.filter(pins => pins.user_id === this.props.user.id)
         return filterByUser.map((pin) => {
@@ -253,29 +277,12 @@ class MapContainer extends React.Component {
         return filteredJournals.map(journal => <FishJournalCard key={journal.id} journal={journal} deleteJournalEntry={this.deleteJournalEntry} editJournalEntry={this.editJournalEntry} pinId={this.state.selectedPin.id}/>)
     }
 
-    renderJournalsClicked = () => {
-        console.log("hello")
-        this.setState(prevState => ({
-            viewJournalsClicked: !prevState.viewJournalsClicked
-        }))
-    }
-
-    addNewPinClicked = () => {
-        this.setState(prevState => ({
-            addNewPinClicked: !prevState.addNewPinClicked
-        }))
-    }
-
+// Delete Pin Button Handler
     deletePinClickHandler = () => {
         this.deletePinHandler(this.state.selectedPin.id)
     }
 
-    addJournalClickedHandler = () => {
-        this.setState(prevState => ({
-            addJournalClicked: !prevState.addJournalClicked
-        }))
-    }
-
+// Button Rendering 
     renderDeletePinAddJournal = () => {
         return (
             <div>
@@ -285,19 +292,29 @@ class MapContainer extends React.Component {
         )
     }
 
+// Render Function
     render() {
-        console.log(this.state.fishJournalAPI)
-        console.log(this.state.viewJournalsClicked)
-        
+        console.log(this.props.user)
         return(
-           
             <div>
                 <button onClick={this.addNewPinClicked}>Add New Pin</button> 
                 {this.state.addNewPinClicked === false ? <></> : <AddPinForm addPin={this.addPin} user={this.props.user} latLng={this.state.currentMarker} closeForm={this.addNewPinClicked}/>}
-                {this.state.selectedPin && <h2>{this.state.selectedPin.title}</h2>}
-                {this.state.selectedPin && this.renderDeletePinAddJournal()}
+                
+                {/* {this.state.selectedPin && this.renderDeletePinAddJournal()} */}
                 {this.state.addJournalClicked === false ? <></> : <AddJournalFrom selectedPin={this.state.selectedPin} addJournalEntry={this.addJournalEntry}/>}
-                {this.state.selectedPin && this.renderJournals()}
+                {this.state.selectedPin && 
+                <Modal 
+                    isOpen={true}
+                    className="JournalsModel"
+                    overlayClassName="Overlay"
+                    
+                >
+                    <div className="PinTitle">
+                        <h2>{this.state.selectedPin.title}</h2>
+                        {this.state.selectedPin && this.renderDeletePinAddJournal()}
+                    </div>
+                    {this.renderJournals()}
+                </Modal>}
                 <Map
                     onClick={this.mapClickHandler}
                     google={this.props.google}
@@ -305,14 +322,17 @@ class MapContainer extends React.Component {
                     style={mapSize}
                     styles={mapStyles}
                     initialCenter={{ lat: 40.7192243, lng: -73.9485957}}
-                    >
-                    {this.state.currentMarker && <Marker position={this.state.currentMarker} icon={{
-                        url: '/PikPng.com_talent-icon-png_4165003.png',
-                        scaledSize: new window.google.maps.Size(24, 31)
-                
-                    }}/>}
+                    // center={{ lat:this.state.selectedPin.latitude, lng:this.state.selectedPin.longitude}}
+                >
+                    {this.state.currentMarker && 
+                        <Marker position={this.state.currentMarker} 
+                                icon={{ url: '/PikPng.com_talent-icon-png_4165003.png',
+                                        scaledSize: new window.google.maps.Size(24, 31)
+                                }}
+                        />
+                    }
                     {this.renderUserMarkers()}
-                    {this.state.selectedPin &&  (
+                    {/* {this.state.selectedPin &&  (
                         <InfoWindow 
                             visible={true} 
                             onCloseClick={() => 
@@ -322,10 +342,10 @@ class MapContainer extends React.Component {
                                 lat: this.state.selectedPin.latitude,
                                 lng: this.state.selectedPin.longitude
                             }}
-                            >
+                        >
                             <h3>{this.state.selectedPin.title}</h3>
                         </InfoWindow>
-                    )}
+                    )} */}
                 </Map>
             </div>
         )

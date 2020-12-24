@@ -2,6 +2,10 @@ import React from 'react'
 import LoginForm from '../Component/LoginForm'
 import SignupForm from '../Component/SignupForm'
 import ProfileCard from '../Component/ProfileCard'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import '../Container/Auth.css'
 
 class AuthContainer extends React.Component {
 
@@ -150,12 +154,25 @@ class AuthContainer extends React.Component {
         console.log(this.state.user)
         
         return (
-            <>
-                { this.state.user.length === 0 ? this.renderLoginSignup() :
+            <div className="Landing">
+
+                <Container >
+                <Row>
+                    <Col md={6}><LoginForm loginHandler={this.loginHandler}/></Col>
+                    
+                    <Col md={6}><SignupForm signupHandler={this.signupHandler}/></Col>
+                </Row>
+                <Row>
+                    <Col>About Us BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH </Col>
+                    <Col>Features: Cool hats</Col>
+                    <Col><img src="/fishlogo.png" alt="Fish Logo" width="300" height="400"/></Col>
+                </Row>
+                </Container>
+                {/* { this.state.user.length === 0 ? this.renderLoginSignup() :
                 this.renderLogoutViewProfile() }
                 { this.state.viewProfileClicked === true ? <ProfileCard editAccountHandler={this.editAccountHandler} deleteAccountHandler={this.deleteAccountHandler} user={this.state.user} editClickHandler={this.editClickHandler} editProfileClickedState={this.state.editProfileClicked} /> :
-                <></>}
-            </>
+                <></>} */}
+            </div>
         )
     }
 }

@@ -1,8 +1,11 @@
 import React from 'react'
 import './App.css';
 import AuthContainer from './Container/AuthContainer'
-import PinContainer from './Container/PinContainer';
+import FishContainer from './Container/FishContainer'
 import MapContainer from './Container/MapContainer'
+import NavigationBar from './Component/NavigationBar'
+import WelcomePage from "./Component/WelcomePage";
+import {Route} from 'react-router-dom'
 
 class App extends React.Component {
 
@@ -10,6 +13,20 @@ class App extends React.Component {
     user: []
   }
 
+  componentDidMount(){
+    const token = localStorage.getItem("token")
+    if (token) {
+        fetch("http://localhost:3000/api/v1/profile", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}`},
+    })
+        .then(resp => resp.json())
+        .then(data => { 
+            this.setState({ user: data.user })
+            
+        })
+    } 
+}
 
   pullCurrentUser = (user) => {
     this.setState({ user: user})
@@ -20,20 +37,22 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(process.env.REACT_APP_MAPS_KEY)
+    console.log(this.state.user)
     return (
       <div>
-        <h1>LiveFishingJournal</h1>
+      
           <div>
-            <AuthContainer pullCurrentUser={this.pullCurrentUser} clearUser={this.clearUser}/>
-            {/* <PinContainer user={this.state.user}/> */}
-            <MapContainer user={this.state.user}/>
+            <NavigationBar />
+            <Route path="/welcome" render={() => <AuthContainer pullCurrentUser={this.pullCurrentUser} clearUser={this.clearUser}/>} />
+            {/* <AuthContainer pullCurrentUser={this.pullCurrentUser} clearUser={this.clearUser}/> */}
+            {/* <FishContainer /> */}
+            <Route path="/map" render={() => <MapContainer user={this.state.user}/>}/>
+            {/* <MapContainer user={this.state.user}/> */}
           </div>
       </div>
     )
   }
   
-    
 }
 
 export default App;

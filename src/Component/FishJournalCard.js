@@ -1,5 +1,6 @@
 import React from 'react'
 import EditJournalForm from '../Component/EditJournalForm'
+import '../Component/FishJournalCard.css'
 
 class FishJournalCard extends React.Component {
 
@@ -20,8 +21,9 @@ class FishJournalCard extends React.Component {
 
     render() {
         return(
-            <>
-                <h3>{this.props.journal.fish_type}</h3>
+            <div className="JournalCard">
+                <hr/>
+                <h3 className="CardHeader">{this.props.journal.fish_type}</h3>
                 <h4>{this.props.journal.image}</h4>
                 <h4>Date Caught: {this.props.journal.date}</h4>
                 <h4>Fish Length: {this.props.journal.fish_length}</h4>
@@ -33,7 +35,7 @@ class FishJournalCard extends React.Component {
                 <button onClick={this.editJournalEntryClickHandler}>Edit Journal Entry</button>
                 <button onClick={this.deleteJournalEntryClickHandler}>Delete Journal Entry</button>
                 {this.state.editJournalClicked === false ? <></> : <EditJournalForm editJournalEntry={this.props.editJournalEntry} journal={this.props.journal} pinId={this.props.pinId}/>}
-            </>
+            </div>
         )
     }
 }
