@@ -1,0 +1,18 @@
+.Modal {
+    top: 125px;
+    max-width: 90% !important;
+    
+}
+
+#example-custom-modal-styling-title {
+    text-align: center;
+}
+
+.ModalBody {
+    height: 800px;
+    overflow-y: auto; 
+}
+
+.ModalHeader {
+    text-align: center;
+}

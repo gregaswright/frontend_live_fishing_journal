@@ -1,4 +1,5 @@
 import React from 'react'
+import FishContainer from '../Container/FishContainer'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import NavDropdown from 'react-bootstrap/NavDropdown'
@@ -10,12 +11,21 @@ import '../Component/NavigationBar.css'
 
 class NavigationBar extends React.Component {
 
+    state = {
+        localFishClick: null
+    }
+
     localClickHandler = () => {
-        console.log('hello')
+        this.setState(prevState => ({
+            localFishClick: !prevState.localFishClick
+        }))
+        console.log(this.state.localFishClick)
+        
     }
 
     render() {
         return (
+            <>
             <div className="NavDiv">
                 <Navbar className="Nav"  expand="lg">
                 <Navbar.Brand>LiveFishingJournal</Navbar.Brand>
@@ -28,6 +38,11 @@ class NavigationBar extends React.Component {
                 </Navbar.Collapse>
                 </Navbar>            
             </div>
+            <div>
+                <FishContainer localFishClick={this.state.localFishClick}
+                localClickHandler={this.localClickHandler}/>
+            </div>
+            </>
             )
     }
 }

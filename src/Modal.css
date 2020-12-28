@@ -25,7 +25,13 @@
     top: 98px;
     width: 168px;
     border-radius: 0px;
-    background-color: red;
+    
   }
+
+  .Divider {
+    width:5px;
+    height:auto;
+    display:inline-block;
+}
   
    

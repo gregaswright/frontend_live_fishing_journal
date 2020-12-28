@@ -287,8 +287,9 @@ class MapContainer extends React.Component {
     renderDeletePinAddJournal = () => {
         return (
             <div>
-                <button onClick={this.addJournalClickedHandler}>Add New Journal Entry</button>
-                <button onClick={this.deletePinClickHandler}>Delete Pin</button>
+                <Button onClick={this.addJournalClickedHandler} style={{ color: "white", background: "#8ac0c4", borderColor: "#8ac0c4" }}>Add New Journal Entry</Button>
+                <div className="Divider"/>
+                <Button onClick={this.deletePinClickHandler} style={{ color: "white", background: "#8ac0c4", borderColor: "#8ac0c4" }}>Delete Pin</Button>
             </div>
         )
     }
@@ -298,7 +299,7 @@ class MapContainer extends React.Component {
         console.log(this.props.user)
         return(
             <div>
-                <Button className="AddPinButton" variant="default" style={{ color: "white", background: "#0065a2" }} onClick={this.addNewPinClicked}>Add New Fish Pin</Button> 
+                <Button className="AddPinButton" variant="default" style={{ color: "white", background: "#0065a2"}} onClick={this.addNewPinClicked}>Add New Fish Pin</Button> 
                 {this.state.addNewPinClicked === false ? <></> : <AddPinForm addPin={this.addPin} user={this.props.user} latLng={this.state.currentMarker} closeForm={this.addNewPinClicked}/>}
                 
                 {/* {this.state.selectedPin && this.renderDeletePinAddJournal()} */}
@@ -308,13 +309,12 @@ class MapContainer extends React.Component {
                     isOpen={true}
                     className="JournalsModel"
                     overlayClassName="Overlay"
-                    
                 >
                     <div className="PinTitle">
                         <h2>{this.state.selectedPin.title}</h2>
                         {this.state.selectedPin && this.renderDeletePinAddJournal()}
                     </div>
-                    {this.renderJournals()}
+                        {this.renderJournals()}
                 </Modal>}
                 <Map
                     onClick={this.mapClickHandler}
@@ -333,20 +333,7 @@ class MapContainer extends React.Component {
                         />
                     }
                     {this.renderUserMarkers()}
-                    {/* {this.state.selectedPin &&  (
-                        <InfoWindow 
-                            visible={true} 
-                            onCloseClick={() => 
-                                {this.setState({ selectedPin: null});
-                            }}
-                            position={{
-                                lat: this.state.selectedPin.latitude,
-                                lng: this.state.selectedPin.longitude
-                            }}
-                        >
-                            <h3>{this.state.selectedPin.title}</h3>
-                        </InfoWindow>
-                    )} */}
+                 
                 </Map>
             </div>
         )
