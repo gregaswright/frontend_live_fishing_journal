@@ -1,16 +1,14 @@
 import React from 'react'
 import './App.css';
 import AuthContainer from './Container/AuthContainer'
-import FishContainer from './Container/FishContainer'
 import MapContainer from './Container/MapContainer'
 import NavigationBar from './Component/NavigationBar'
-import WelcomePage from "./Component/WelcomePage";
-import {Route} from 'react-router-dom'
+import {Redirect, Route} from 'react-router-dom'
 
 class App extends React.Component {
 
   state = {
-    user: []
+    user: null
   }
 
   componentDidMount(){
@@ -33,23 +31,45 @@ class App extends React.Component {
   }
 
   clearUser = () => {
-    this.setState({ user: []})
+    this.setState({ user: null})
   }
 
   render() {
+
     console.log(this.state.user)
     return (
-      <div>
-      
           <div>
-            <NavigationBar />
-            <Route path="/welcome" render={() => <AuthContainer pullCurrentUser={this.pullCurrentUser} clearUser={this.clearUser}/>} />
-            {/* <AuthContainer pullCurrentUser={this.pullCurrentUser} clearUser={this.clearUser}/> */}
-            {/* <FishContainer /> */}
-            <Route path="/map" render={() => <MapContainer user={this.state.user}/>}/>
-            {/* <MapContainer user={this.state.user}/> */}
+            <NavigationBar 
+              user={this.state.user}
+            />
+              <Route 
+                exact path="/" 
+                render={() => {
+                  return (
+                    this.state.user ? 
+                    <Redirect to="/welcome" /> :
+                    <Redirect to="/map" />
+                  )
+                }}
+              />
+                <Route 
+                  path="/map" 
+                  render={() => 
+                    <MapContainer 
+                    user={this.state.user}
+                    />
+                  }
+                />
+              <Route 
+                path="/welcome" 
+                render={() => 
+                  <AuthContainer 
+                    pullCurrentUser={this.pullCurrentUser} 
+                    clearUser={this.clearUser}
+                  />
+                } 
+              />
           </div>
-      </div>
     )
   }
   

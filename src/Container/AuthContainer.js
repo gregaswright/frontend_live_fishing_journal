@@ -1,4 +1,5 @@
 import React from 'react'
+import { Route, withRouter, Redirect } from 'react-router'
 import LoginForm from '../Component/LoginForm'
 import SignupForm from '../Component/SignupForm'
 import ProfileCard from '../Component/ProfileCard'
@@ -10,7 +11,7 @@ import '../Container/Auth.css'
 class AuthContainer extends React.Component {
 
     state = {
-        user: [],
+        user: null,
         editProfileClicked: false,
         viewProfileClicked: false
     }
@@ -49,7 +50,7 @@ class AuthContainer extends React.Component {
         .then(response => response.json())
         .then(data => {
             localStorage.setItem("token", data.jwt)
-            this.setState({ user: data.user })
+            this.setState({ user: data.user }, () => this.props.history.push("/map"))
             this.props.pullCurrentUser(this.state.user)
         })
     }
@@ -66,7 +67,7 @@ class AuthContainer extends React.Component {
         .then(response => response.json())
         .then(userData => {
             localStorage.setItem("token", userData.jwt)
-            this.setState({ user: userData.user })
+            this.setState({ user: userData.user }, () => this.props.history.push("/map"))
         })
     }
 
@@ -150,15 +151,20 @@ class AuthContainer extends React.Component {
         )
     }
 
+    checkForUser = () => {
+        return (this.state.user && <Redirect to="/map" />)
+    }
+
     render() {
         console.log(this.state.user)
         
         return (
             <div className="Landing">
+                {/* {this.checkForUser()} */}
 
                 <Container >
                 <Row>
-                    <Col md={6}><LoginForm loginHandler={this.loginHandler}/></Col>
+                    <Col md={6}><LoginForm loginHandler={this.loginHandler} user={this.state.user}/></Col>
                     
                     <Col md={6}><SignupForm signupHandler={this.signupHandler}/></Col>
                 </Row>
@@ -177,4 +183,4 @@ class AuthContainer extends React.Component {
     }
 }
 
-export default AuthContainer
+export default withRouter(AuthContainer)

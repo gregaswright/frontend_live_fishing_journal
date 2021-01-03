@@ -1,12 +1,18 @@
 import React from 'react'
-import { Map, Marker, GoogleApiWrapper, InfoWindow } from 'google-maps-react';
+import DoubleCheckDeletePin from '../Component/DoubleCheckDeletePin'
+import MoonPhase from '../Component/MoonPhase'
+import { Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 import Modal from 'react-modal'
 import FishJournalCard from '../Component/FishJournalCard'
 import AddPinForm from '../Component/AddPinForm'
 import AddJournalFrom from '../Component/AddJournalForm'
 import mapStyles from '../mapStyles'
-import Button from "react-bootstrap/Button"
+import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import '../Modal.css'
+import { Redirect } from 'react-router-dom';
 
 const mapSize = {
     width: '100%',
@@ -26,7 +32,8 @@ class MapContainer extends React.Component {
         pinClicked: false,
         viewJournalsClicked: false,
         addNewPinClicked: false,
-        addJournalClicked: false
+        addJournalClicked: false,
+        deletePinClick: null
     }
 
 
@@ -152,7 +159,6 @@ class MapContainer extends React.Component {
     }
 
     editJournalEntry = (editJournalObj, journalId) => {
-        console.log(editJournalObj)
         fetch(`http://localhost:3000/api/v1/fish_journals/${journalId}`, {
             method: "PATCH",
             headers: {
@@ -176,7 +182,6 @@ class MapContainer extends React.Component {
         .then( 
             newJournal => {
             let copiedApi= [...this.state.fishJournalAPI]
-            console.log(copiedApi)
             let index = copiedApi.findIndex(journalObj => journalObj.id === newJournal.fish_journal.id)
             copiedApi[index] = newJournal.fish_journal
             this.setState({ fishJournalAPI: copiedApi})
@@ -233,6 +238,7 @@ class MapContainer extends React.Component {
         this.setState(prevState => ({
             addJournalClicked: !prevState.addJournalClicked
         }))
+        console.log(this.state.addJournalClicked)
     }
 
 
@@ -280,7 +286,10 @@ class MapContainer extends React.Component {
 
 // Delete Pin Button Handler
     deletePinClickHandler = () => {
-        this.deletePinHandler(this.state.selectedPin.id)
+        this.setState(prevState => ({
+            deletePinClick: !prevState.deletePinClick
+        }))
+        // this.deletePinHandler(this.state.selectedPin.id)
     }
 
 // Button Rendering 
@@ -294,16 +303,58 @@ class MapContainer extends React.Component {
         )
     }
 
+    checkForUser = () => {
+        return (!this.props.user && <Redirect to="/welcome" />)
+    }
+
+    month = () => {
+        let d = new Date();
+        return d.getMonth() + 1;
+    }
+
+    day = () => {
+        let d = new Date();
+        return d.getDate();
+    }
+
+    year = () => {
+        let d = new Date();
+        return d.getFullYear();
+    }
+
 // Render Function
     render() {
         console.log(this.props.user)
         return(
             <div>
-                <Button className="AddPinButton" variant="default" style={{ color: "white", background: "#0065a2"}} onClick={this.addNewPinClicked}>Add New Fish Pin</Button> 
-                {this.state.addNewPinClicked === false ? <></> : <AddPinForm addPin={this.addPin} user={this.props.user} latLng={this.state.currentMarker} closeForm={this.addNewPinClicked}/>}
                 
-                {/* {this.state.selectedPin && this.renderDeletePinAddJournal()} */}
-                {this.state.addJournalClicked === false ? <></> : <AddJournalFrom selectedPin={this.state.selectedPin} addJournalEntry={this.addJournalEntry}/>}
+                {/* {this.checkForUser()} */}
+                {this.state.deletePinClick && 
+                    <DoubleCheckDeletePin 
+                        deletePinHandler={this.deletePinHandler}
+                        selectedPinId={this.state.selectedPin.id}
+                        deletePinClickHandler={this.deletePinClickHandler}
+                    />
+                }
+                <Button 
+                    className="AddPinButton" 
+                    variant="default" 
+                    style={{ color: "white", background: "#0065a2"}} 
+                    onClick={this.addNewPinClicked}
+                >
+                    Add New Fish Pin
+                </Button> 
+                {this.state.addNewPinClicked === false ? <></> : 
+                    <AddPinForm 
+                        addPin={this.addPin} 
+                        user={this.props.user} 
+                        latLng={this.state.currentMarker} 
+                        closeForm={this.addNewPinClicked}/>}
+               {this.state.addJournalClicked && 
+                    <AddJournalFrom 
+                        selectedPin={this.state.selectedPin} 
+                        addJournalEntry={this.addJournalEntry} 
+                        addJournalClicked={this.addJournalClickedHandler}/>}
                 {this.state.selectedPin && 
                 <Modal 
                     isOpen={true}
@@ -316,6 +367,24 @@ class MapContainer extends React.Component {
                     </div>
                         {this.renderJournals()}
                 </Modal>}
+                <Modal 
+                    isOpen={true}
+                    className="LogoModel"
+                    overlayClassName="Overlay"    
+                >
+                    <h2>LongIslandFishingJournal</h2>
+        
+                </Modal>
+                <Modal 
+                    isOpen={true}
+                    className="MoonPhaseModel"
+                    overlayClassName="Overlay"    
+                >
+                   <MoonPhase day={this.day} month={this.month} year={this.year}/> 
+                    {/* <h6>Current Moon Cycle for Today {this.month()}/{this.day()}/{this.year()}:</h6>
+                    <MoonPhase day={this.day} month={this.month} year={this.year}/> */}
+        
+                </Modal>
                 <Map
                     onClick={this.mapClickHandler}
                     google={this.props.google}
@@ -332,7 +401,7 @@ class MapContainer extends React.Component {
                                 }}
                         />
                     }
-                    {this.renderUserMarkers()}
+                    {this.props.user && this.renderUserMarkers()}
                  
                 </Map>
             </div>

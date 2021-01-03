@@ -1,0 +1,19 @@
+.MoonImage {
+    width: 200%;
+    height: auto;      
+}
+
+.CenterCol {
+  padding-top: 35px;
+  color: 	#414141;
+  text-shadow: -1px -1px 0 #f1efe8, 1px -1px 0#f1efe8, -1px 1px 0#f1efe8, 1px 1px 0 #f1efe8;
+
+}
+
+.LeftCol {
+  padding-top: 25px;
+  color: 	#414141;
+}
+
+
+

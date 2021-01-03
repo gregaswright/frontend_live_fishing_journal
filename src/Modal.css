@@ -11,6 +11,39 @@
     background-color:#f1efe8;
   }
 
+  .LogoModel {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+    position: absolute;
+    top: -5px;
+    left: 200px;
+    bottom: 707px;
+    /* height: 600px; */
+    width: 400px;
+    background-color:#f1efe8;
+    padding-top: 70px;
+    padding-right: 18px;
+    padding-bottom: 0px;
+    padding-left: 18px;
+    color: 	#414141;
+  }
+
+  .MoonPhaseModel {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+    position: absolute;
+    top: -5px;
+    left: 625px;
+    bottom: 707px;
+    /* height: 600px; */
+    width: 300px;
+    background-image: linear-gradient(to right, #f1efe8 , black);
+    padding-top: 40px;
+    padding-right: 45px;
+    padding-bottom: 0px;
+    padding-left: 8px;
+  }
+
   .PinTitle{
     padding-top: 30px;
     padding-right: 10px;

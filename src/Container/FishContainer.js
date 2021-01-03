@@ -37,8 +37,6 @@ class FishContainer extends React.Component {
     }
 
     render() {
-        console.log(this.props.localFishClick)
-        console.log(this.state.sea_creatures)
         return (
             <>
                 <Modal

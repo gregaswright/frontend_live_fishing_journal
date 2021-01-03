@@ -23,20 +23,16 @@ class SignupForm extends React.Component {
         return (
 
             <Form onSubmit={this.submitHandler}> 
-            <Form.Group controlId="formBasicEmail">
-                
+            <Form.Group >
                 <Form.Control type="text" name="username" placeholder="username" value={this.state.username} onChange={this.changeHandler}/>
             </Form.Group>
             <Form.Group controlId="formBasicPassword">
-                
                 <Form.Control type="password" name="password" placeholder="password" value={this.state.password} onChange={this.changeHandler} />
             </Form.Group>
-            <Form.Group controlId="formBasicEmail">
-                
+            <Form.Group >
                 <Form.Control type="text" name="email" placeholder="email" value={this.state.email} onChange={this.changeHandler} />
             </Form.Group>
-            <Form.Group controlId="formBasicImg">
-                
+            <Form.Group >
                 <Form.Control type="text" name="profile_image" placeholder="profile_image" value={this.state.profile_image} onChange={this.changeHandler} />
             </Form.Group>
             <Button variant="primary" type="submit">
