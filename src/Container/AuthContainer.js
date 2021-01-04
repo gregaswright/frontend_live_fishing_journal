@@ -1,25 +1,14 @@
 import React from 'react'
 import { Route, withRouter, Redirect } from 'react-router'
-import LoginForm from '../Component/LoginForm'
-import SignupForm from '../Component/SignupForm'
-import ProfileCard from '../Component/ProfileCard'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+import WelcomePage from '../Component/WelcomePage'
+import NavigationBar from '../Component/NavigationBar'
+import MapContainer from '../Container/MapContainer'
 import '../Container/Auth.css'
 
 class AuthContainer extends React.Component {
 
     state = {
-        user: null,
-        editProfileClicked: false,
-        viewProfileClicked: false
-    }
-
-    sendUser = () => {
-        return (
-            this.props.pullCurrentUser(this.state.user)
-        )
+        user: null
     }
 
     componentDidMount(){
@@ -32,12 +21,11 @@ class AuthContainer extends React.Component {
             .then(resp => resp.json())
             .then(data => { 
                 this.setState({ user: data.user })
-                this.props.pullCurrentUser(this.state.user)
+                
             })
         } 
     }
     
-
     loginHandler = (userInfo) => {
         fetch('http://localhost:3000/api/v1/login', {
             method: 'POST',
@@ -51,7 +39,7 @@ class AuthContainer extends React.Component {
         .then(data => {
             localStorage.setItem("token", data.jwt)
             this.setState({ user: data.user }, () => this.props.history.push("/map"))
-            this.props.pullCurrentUser(this.state.user)
+            
         })
     }
 
@@ -114,32 +102,7 @@ class AuthContainer extends React.Component {
         this.setState ({
             user: [],
             editProfileClicked: false
-        })
-        this.props.clearUser()
-    }
-
-    editClickHandler = () => {
-        this.setState(prevState => ({
-            editProfileClicked: !prevState.editProfileClicked
-        }))
-    }
-
-
-    viewProfileClickHandler = () => {
-        this.setState(prevState => ({
-            editProfileClicked: false,
-            viewProfileClicked: !prevState.viewProfileClicked
-        }))
-    }
-   
-
-    renderLoginSignup = () => {
-        return (
-            <>
-                <LoginForm loginHandler={this.loginHandler}/>
-                <SignupForm signupHandler={this.signupHandler}/>
-            </>
-        )
+        }, () => this.props.history.push("/welcome"))
     }
 
     renderLogoutViewProfile = () => {
@@ -151,33 +114,45 @@ class AuthContainer extends React.Component {
         )
     }
 
-    checkForUser = () => {
-        return (this.state.user && <Redirect to="/map" />)
-    }
-
     render() {
         console.log(this.state.user)
         
         return (
-            <div className="Landing">
-                {/* {this.checkForUser()} */}
-
-                <Container >
-                <Row>
-                    <Col md={6}><LoginForm loginHandler={this.loginHandler} user={this.state.user}/></Col>
-                    
-                    <Col md={6}><SignupForm signupHandler={this.signupHandler}/></Col>
-                </Row>
-                <Row>
-                    <Col>About Us BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH BLAH </Col>
-                    <Col>Features: Cool hats</Col>
-                    <Col><img src="/fishlogo.png" alt="Fish Logo" width="300" height="400"/></Col>
-                </Row>
-                </Container>
-                {/* { this.state.user.length === 0 ? this.renderLoginSignup() :
-                this.renderLogoutViewProfile() }
-                { this.state.viewProfileClicked === true ? <ProfileCard editAccountHandler={this.editAccountHandler} deleteAccountHandler={this.deleteAccountHandler} user={this.state.user} editClickHandler={this.editClickHandler} editProfileClickedState={this.state.editProfileClicked} /> :
-                <></>} */}
+            <div>
+                {this.state.user && 
+                <NavigationBar
+                    logOutHandler={this.logOutHandler}
+                    user={this.state.user}
+                    editAccountHandler={this.editAccountHandler}
+                />}
+                <Route 
+                    exact path="/" 
+                    render={() => {
+                        return (
+                            this.state.user ? 
+                            <Redirect to="/welcome" /> :
+                            <Redirect to="/map" />
+                        )
+                    }}
+                />
+                <Route 
+                  path="/map" 
+                  render={() => 
+                    <MapContainer 
+                    user={this.state.user}
+                    />
+                  }
+                />
+                <Route 
+                    path="/welcome" 
+                    render={() => 
+                        <WelcomePage 
+                            loginHandler={this.loginHandler} 
+                            signupHandler={this.signupHandler}
+                            user={this.state.user}
+                        />
+                    } 
+                />
             </div>
         )
     }

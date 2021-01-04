@@ -9,10 +9,10 @@ class MoonPhase extends React.Component {
 
   
     getMoonPhase = () => {
-        let c = 0
-        let e = 0
-        let jd = 0
         let b = 0
+        let jd = b
+        let e = jd
+        let c = e
         let month = this.props.month()
         let day = this.props.day()
         let year = this.props.year()

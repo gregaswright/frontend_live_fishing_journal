@@ -18,10 +18,10 @@
     top: -5px;
     left: 200px;
     bottom: 707px;
-    /* height: 600px; */
+    height: 142px;
     width: 400px;
     background-color:#f1efe8;
-    padding-top: 70px;
+    padding-top: 60px;
     padding-right: 18px;
     padding-bottom: 0px;
     padding-left: 18px;
@@ -35,7 +35,7 @@
     top: -5px;
     left: 625px;
     bottom: 707px;
-    /* height: 600px; */
+    height: 142px;
     width: 300px;
     background-image: linear-gradient(to right, #f1efe8 , black);
     padding-top: 40px;
@@ -65,6 +65,16 @@
     width:5px;
     height:auto;
     display:inline-block;
+}
+
+.BottomLeft {
+  padding-left: 10px;
+  color: 	#414141;
+}
+
+.BottomRight {
+  padding-bottom: 20px;
+  color: 	#414141;
 }
   
    

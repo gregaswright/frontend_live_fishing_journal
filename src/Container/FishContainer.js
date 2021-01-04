@@ -17,6 +17,8 @@ class FishContainer extends React.Component {
         .then(data => this.setState({sea_creatures: data}));
     }
 
+    
+
     searchHandler = (event) => {
         this.setState({ searchValue: event.target.value})
     }
@@ -27,7 +29,7 @@ class FishContainer extends React.Component {
 
     renderFishCard = () => {
         let filterByRegion = this.filteredCreatures().filter(creature => creature.fisheries_region.includes("Greater Atlantic")) 
-        return filterByRegion.map(creature => <FishCard key={creature.id} creature={creature}/>)
+        return filterByRegion.map(creature => <FishCard key={creature.id} creature={creature} addToMySpecies={this.props.addToMySpecies}/>)
     }
 
     seeFishButtonClicked = () => {
@@ -41,7 +43,7 @@ class FishContainer extends React.Component {
             <>
                 <Modal
                     show={this.props.localFishClick}
-                    onHide={this.props.localClickHandler}
+                    onHide={this.props.localFishClickHandler}
                     dialogClassName="Modal"
                     aria-labelledby="example-custom-modal-styling-title"
                 >

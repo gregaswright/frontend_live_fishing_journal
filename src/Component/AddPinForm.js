@@ -108,6 +108,7 @@ class AddPinForm extends React.Component {
                         <Form.Group as={Col} controlId="formGridState">
                         <Form.Label>Tide</Form.Label>
                         <Form.Control as="select" name="tide" placeholder="tide" value={this.state.tide} onChange={this.changeHandler} >
+                            <option>Select Tide</option>
                             <option>High</option>
                             <option>Low</option>
                             <option>Incoming</option>
@@ -118,6 +119,7 @@ class AddPinForm extends React.Component {
                         <Form.Group as={Col} controlId="formGridState">
                         <Form.Label>Moon Phase</Form.Label>
                         <Form.Control as="select" name="moon_phase" placeholder="moon_phase" value={this.state.moon_phase} onChange={this.changeHandler}>
+                            <option>Select Moon Phase</option>
                             <option>Third Quarter</option>
                             <option>Waning Gibbous</option>
                             <option>Full Moon</option>

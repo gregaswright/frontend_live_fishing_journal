@@ -1,12 +1,7 @@
 import React from 'react'
-import FishContainer from '../Container/FishContainer'
-import MoonPhase from '../Component/MoonPhase'
+import ProfileCard from '../Component/ProfileCard'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import NavDropdown from 'react-bootstrap/NavDropdown'
-import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
-import Button from 'react-bootstrap/Button'
 import '../Component/NavigationBar.css'
 
 
@@ -17,18 +12,18 @@ class NavigationBar extends React.Component {
         localAccountClick: null
     }
 
-    localClickHandler = () => {
+    localFishClickHandler = () => {
         this.setState(prevState => ({
             localFishClick: !prevState.localFishClick
         }))
-        console.log(this.state.localFishClick)
-        
+        console.log(this.state.localFishClick)    
     }
 
     localAccountClickHandler = () => {
         this.setState(prevState => ({
             localAccountClick: !prevState.localAccountClick
         }))
+        console.log(this.state.localAccountClick)
     }
 
     render() {
@@ -41,14 +36,17 @@ class NavigationBar extends React.Component {
                 <Navbar.Collapse id="basic-navbar-nav">
                     
                         {this.props.user && <h6>Hello, {this.props.user.username}!</h6>}
-                        <Nav.Link onClick>My Account</Nav.Link>
-                        <Nav.Link href="#home">Log Out</Nav.Link>
+                        <Nav.Link onClick={this.localAccountClickHandler}>My Account</Nav.Link>
+                        <Nav.Link onClick={this.props.logOutHandler}>Log Out</Nav.Link>
                 </Navbar.Collapse>
                 </Navbar>            
             </div>
             <div>
-                {/* <FishContainer localFishClick={this.state.localFishClick}
-                localClickHandler={this.localClickHandler}/> */}
+                <ProfileCard 
+                    user={this.props.user} 
+                    localAccountClick={this.state.localAccountClick} localAccountClickHandler={this.localAccountClickHandler}
+                    editAccountHandler={this.props.editAccountHandler}
+                />
             </div>
             </>
             )

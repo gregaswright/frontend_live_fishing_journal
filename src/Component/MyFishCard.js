@@ -3,26 +3,11 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import '../Component/FishCard.css'
 
-class FishCard extends React.Component {
+class MyFishCard extends React.Component {
 
-    state = {
-        species_name: this.props.creature.species_name,
-        taste: this.props.creature.taste,
-        texture: this.props.creature.texture,
-        biology: this.props.creature.biology,
-        habitat: this.props.creature.habitat,
-        population_status: this.props.creature.population_status,
-        phyiscal_description: this.props.creature.phyiscal_description,
-        fisheries_region: this.props.creature.fisheries_region,
-        location: this.props.creature.location,
-        availability: this.props.creature.availability,
-        image: this.props.creature.image,
-    }
-
-    addToMySpeciesClickHandler = () => {
-        this.props.addToMySpecies(this.state)
+    removeFromMySpeciesClickHandler = () => {
+        this.props.removeFromMySpecies(this.props.creature.id)
     }
 
     render() {
@@ -59,11 +44,10 @@ class FishCard extends React.Component {
                         <h6>{this.props.creature.texture.replace(/(<([^>]+)>)/gi, "")}</h6>
                     </Col>
                 </Row>
-                <Button onClick={this.addToMySpeciesClickHandler}>Add to my Species</Button>
+                <Button onClick={this.removeFromMySpeciesClickHandler}>Remove From My Species</Button>
             </Container>
-            
         )
-    }
+        }
 }
 
-export default FishCard
+export default MyFishCard

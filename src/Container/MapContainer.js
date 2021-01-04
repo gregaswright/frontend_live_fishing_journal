@@ -6,11 +6,14 @@ import Modal from 'react-modal'
 import FishJournalCard from '../Component/FishJournalCard'
 import AddPinForm from '../Component/AddPinForm'
 import AddJournalFrom from '../Component/AddJournalForm'
+import FishContainer from '../Container/FishContainer'
+import MyFishContainer from '../Container/MyFishContainer'
 import mapStyles from '../mapStyles'
-import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Nav from 'react-bootstrap/Nav'
+import Button from 'react-bootstrap/Button'
 import '../Modal.css'
 import { Redirect } from 'react-router-dom';
 
@@ -29,11 +32,14 @@ class MapContainer extends React.Component {
         selectedPin: null,
         pins: [],
         fishJournalAPI: [],
+        mySpecies: [],
         pinClicked: false,
         viewJournalsClicked: false,
         addNewPinClicked: false,
         addJournalClicked: false,
-        deletePinClick: null
+        deletePinClick: null,
+        localFishClick: null,
+        localMyFishClick: null
     }
 
 
@@ -41,14 +47,69 @@ class MapContainer extends React.Component {
     componentDidMount() {
         Promise.all([
             fetch('http://localhost:3000/api/v1/pins/').then(res => res.json()),
-            fetch('http://localhost:3000/api/v1/fish_journals/').then(res => res.json())
-        ]).then(([pinData, fishJournalData]) => {
+            fetch('http://localhost:3000/api/v1/fish_journals/').then(res => res.json()),
+            fetch("http://localhost:3000/api/v1/fish_saves/").then(res => res.json())
+        ]).then(([pinData, fishJournalData, fishSaveData]) => {
             this.setState({
                 pins: pinData,
                 fishJournalAPI: fishJournalData,
+                mySpecies: fishSaveData
             });
         })
     }
+
+    addToMySpecies = (newFavFishObj) => {
+        console.log(newFavFishObj)
+        fetch("http://localhost:3000/api/v1/fish_saves/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accepts": "application/json"
+            },
+            body: JSON.stringify({
+                fish_save:{
+                species_name: newFavFishObj.species_name,
+                taste: newFavFishObj.taste,
+                texture: newFavFishObj.texture,
+                biology: newFavFishObj.biology,
+                habitat: newFavFishObj.habitat,
+                population_status: newFavFishObj.population_status,
+                phyiscal_description: newFavFishObj.phyiscal_description,
+                fisheries_region: newFavFishObj.fisheries_region,
+                location: newFavFishObj.location,
+                availability: newFavFishObj.availability,
+                image: newFavFishObj.image,
+                personal_note: "Hello",
+                user_id: this.props.user.id}
+            })
+        })
+        .then(r => r.json())
+        .then(newFav => {
+            this.setState({ 
+                mySpecies: [...this.state.mySpecies, newFav.fish_save]
+                
+            })
+            console.log(newFav)
+    })
+        .catch(console.log)
+    }
+
+    removeFromMySpecies = (mySpeciesId) => {
+        fetch(`http://localhost:3000/api/v1/fish_saves/${mySpeciesId}`, {
+            method: 'DELETE',
+            headers: {
+            'Content-Type': 'application/json',
+            'Accepts': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(() => {
+            let copiedApi= [...this.state.mySpecies]
+            let index = copiedApi.findIndex(mySpeciesObj => mySpeciesObj.id === mySpeciesId)
+            copiedApi.splice(index, 1)
+            this.setState({ mySpecies: copiedApi})
+        })
+    } 
 
     addPin = (newPinObj) => {
         console.log(newPinObj)
@@ -241,6 +302,19 @@ class MapContainer extends React.Component {
         console.log(this.state.addJournalClicked)
     }
 
+    localFishClickHandler = () => {
+        this.setState(prevState => ({
+            localFishClick: !prevState.localFishClick
+        }))
+         
+    }
+
+    localMyFishClickHandler = () => {
+        this.setState(prevState => ({
+            localMyFishClick: !prevState.localMyFishClick
+        }))
+        
+    }
 
 // Map Click Location for Setting Pin    
     mapClickHandler = (mapProps, map, event) => {
@@ -303,10 +377,6 @@ class MapContainer extends React.Component {
         )
     }
 
-    checkForUser = () => {
-        return (!this.props.user && <Redirect to="/welcome" />)
-    }
-
     month = () => {
         let d = new Date();
         return d.getMonth() + 1;
@@ -324,11 +394,21 @@ class MapContainer extends React.Component {
 
 // Render Function
     render() {
+        console.log(this.state.mySpecies)
         console.log(this.props.user)
         return(
             <div>
-                
-                {/* {this.checkForUser()} */}
+                <MyFishContainer 
+                    localMyFishClick={this.state.localMyFishClick}
+                    localMyFishClickHandler={this.localMyFishClickHandler}
+                    mySpecies={this.state.mySpecies}
+                    removeFromMySpecies={this.removeFromMySpecies}
+                />
+                <FishContainer 
+                    localFishClick={this.state.localFishClick}
+                    localFishClickHandler={this.localFishClickHandler}
+                    addToMySpecies={this.addToMySpecies}
+                />
                 {this.state.deletePinClick && 
                     <DoubleCheckDeletePin 
                         deletePinHandler={this.deletePinHandler}
@@ -372,8 +452,21 @@ class MapContainer extends React.Component {
                     className="LogoModel"
                     overlayClassName="Overlay"    
                 >
-                    <h2>LongIslandFishingJournal</h2>
-        
+                    <Container>
+                    <Row>
+                        <Col xs={18} md={12}>
+                            <h4 className="Top" >NorthAtlanticFishingJournal</h4>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={9} md={6}>
+                            <Nav.Link className="BottomLeft" onClick={this.localFishClickHandler}>Atlantic Species</Nav.Link>
+                        </Col>
+                        <Col xs={9} md={6}>
+                            <Nav.Link className="BottomRight" onClick={this.localMyFishClickHandler}>My Species</Nav.Link>
+                        </Col>
+                    </Row>
+                </Container>
                 </Modal>
                 <Modal 
                     isOpen={true}
@@ -381,9 +474,6 @@ class MapContainer extends React.Component {
                     overlayClassName="Overlay"    
                 >
                    <MoonPhase day={this.day} month={this.month} year={this.year}/> 
-                    {/* <h6>Current Moon Cycle for Today {this.month()}/{this.day()}/{this.year()}:</h6>
-                    <MoonPhase day={this.day} month={this.month} year={this.year}/> */}
-        
                 </Modal>
                 <Map
                     onClick={this.mapClickHandler}
@@ -392,7 +482,6 @@ class MapContainer extends React.Component {
                     style={mapSize}
                     styles={mapStyles}
                     initialCenter={{ lat: 40.7192243, lng: -73.9485957}}
-                    // center={{ lat:this.state.selectedPin.latitude, lng:this.state.selectedPin.longitude}}
                 >
                     {this.state.currentMarker && 
                         <Marker position={this.state.currentMarker} 
@@ -402,7 +491,6 @@ class MapContainer extends React.Component {
                         />
                     }
                     {this.props.user && this.renderUserMarkers()}
-                 
                 </Map>
             </div>
         )
