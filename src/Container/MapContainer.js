@@ -482,6 +482,7 @@ class MapContainer extends React.Component {
                     style={mapSize}
                     styles={mapStyles}
                     initialCenter={{ lat: 40.7192243, lng: -73.9485957}}
+                    // center={this.state.selectedPin ? { lat: this.state.selectedPin.latitude, lng: this.state.selectedPin.longitude} : { lat: null, lng: null}}
                 >
                     {this.state.currentMarker && 
                         <Marker position={this.state.currentMarker} 

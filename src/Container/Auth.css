@@ -1,11 +1,49 @@
 
+.Left {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    bottom: -5px;
+    height: px;
+    width: 200px;
+    background-image: url(./welcome1.png);
+    color: 	#414141;
+}
+
+.Right {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    bottom: -5px;
+    height: px;
+    width: 200px;
+    background-image: url(./welcome2.png);
+   
+    color: 	#414141;
+}
 
 
 .Landing {
-   
+    
     position: fixed;
     top: 60%;
     left: 50%;
     /* bring your own prefixes */
     transform: translate(-50%, -50%);
 }
+
+
+.Title {
+
+   color:	#414141;
+   text-align: center;
+   padding-top: 5%;
+}
+
+.Container {
+
+} 

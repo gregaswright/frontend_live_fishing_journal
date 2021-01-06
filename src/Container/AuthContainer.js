@@ -100,7 +100,7 @@ class AuthContainer extends React.Component {
     logOutHandler = () => {
         localStorage.removeItem("token")
         this.setState ({
-            user: [],
+            user: null,
             editProfileClicked: false
         }, () => this.props.history.push("/welcome"))
     }
@@ -130,28 +130,30 @@ class AuthContainer extends React.Component {
                     render={() => {
                         return (
                             this.state.user ? 
-                            <Redirect to="/welcome" /> :
-                            <Redirect to="/map" />
+                            <Redirect to="/map" /> :
+                            <Redirect to="/welcome" />
                         )
                     }}
                 />
                 <Route 
-                  path="/map" 
-                  render={() => 
-                    <MapContainer 
-                    user={this.state.user}
-                    />
-                  }
+                    path="/map" 
+                    render={() => {
+                        return (
+                            this.state.user ?
+                            <MapContainer user={this.state.user}/>:
+                            <Redirect to="/welcome"/>
+                        )
+                    }}
                 />
                 <Route 
                     path="/welcome" 
-                    render={() => 
-                        <WelcomePage 
-                            loginHandler={this.loginHandler} 
-                            signupHandler={this.signupHandler}
-                            user={this.state.user}
-                        />
-                    } 
+                    render={() => {
+                        return (
+                            !this.state.user ?
+                            <WelcomePage loginHandler={this.loginHandler} signupHandler={this.signupHandler} user={this.state.user}/> :
+                            <Redirect to="/map"/>
+                        )
+                    }} 
                 />
             </div>
         )
